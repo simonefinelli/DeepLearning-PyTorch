@@ -43,7 +43,7 @@ def show_collage(train_set, size=(15, 8)):
     This function arranges the first 50 images from the `train_set` in a 5x10
     grid. It displays each image in the grid without axes. If the image is in
     RGB format, it is displayed in color. If the image is in grayscale format,
-    it is displayed using the 'gray_r' colormap.
+    it is displayed using the 'gray' colormap.
 
     :param size: tuple, optional: The size of the displayed image in inches.
     :param train_set: object: PyTorch dataset.
@@ -58,6 +58,6 @@ def show_collage(train_set, size=(15, 8)):
         if len(train_set.data[index].shape) == 3:
             plt.imshow(train_set.data[index])
         else:
-            plt.imshow(train_set.data[index], cmap='gray_r')
+            plt.imshow(train_set.data[index], cmap='gray')
 
     plt.show()
