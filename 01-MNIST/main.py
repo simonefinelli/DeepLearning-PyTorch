@@ -31,8 +31,9 @@ Key Objectives:
         batch sizes during training. Usually, we have a data loader for each
         dataset.
 
-    Model Design and Training: Construct and train a CNN tailored for digit
-        recognition using PyTorch library.
+    Model Design: Construct the Neural Network.
+
+    Training: Train the CNN tailored for digit recognition.
 
     Performance Evaluation: Use of the Confusion Matrix to evaluate accuracy,
         precision, recall, and F1 score.
@@ -43,10 +44,11 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 import torch.optim as optim  # PyTorch's optimization library
-import torch.nn as nn  # basic building block for our Network graphs
+
 
 from torch.utils.data import DataLoader
 from utils import *
+from model import CNN
 
 # check for GPU
 if torch.cuda.is_available():
@@ -99,6 +101,11 @@ dataiter = iter(train_loader)
 images, labels = next(dataiter)
 print(images.shape)
 print(labels.shape)
+
+# create an instance of the neural network
+net = CNN()
+# move the model (memory and operations) to the CUDA device (or CPU/RAM)
+net.to(device)
 
 
 
