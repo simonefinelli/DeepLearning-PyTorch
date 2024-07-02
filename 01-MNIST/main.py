@@ -11,7 +11,7 @@ we aim to analyze the model's performance and extract meaningful insights from
 the training process and results.
 
 Key Objectives:
-    Imports: import the libraries.
+    Imports: import the used libraries.
 
     Transformer definition: Transformers are needed to ensure the instance
         (image) has the right format for input into our model.
@@ -25,9 +25,11 @@ Key Objectives:
         TIP: MNIST doesn't have a separate test set. Therefore, we use the test
         set for both validation and test.
 
-    Inspect the dataset:
+    Inspect the dataset: Show samples of the dataset to inspect them.
 
-    Data loader:
+    Data loader: is a function that we'll use to grab our data in specified
+        batch sizes during training. Usually, we have a data loader for each
+        dataset.
 
     Model Design and Training: Construct and train a CNN tailored for digit
         recognition using PyTorch library.
@@ -43,6 +45,7 @@ import torchvision.transforms as transforms
 import torch.optim as optim  # PyTorch's optimization library
 import torch.nn as nn  # basic building block for our Network graphs
 
+from torch.utils.data import DataLoader
 from utils import *
 
 # check for GPU
@@ -76,6 +79,26 @@ print(f"Test set size: {test_set.data.shape}")
 img_show("MNIST Sample", train_set.data[0].numpy())
 show_collage(train_set)
 
+# data loader
+train_loader = DataLoader(
+    train_set,
+    batch_size=128,
+    shuffle=True,  # True to prevent data sequence bias
+    num_workers=0  # specifies how many CPU cores we wish to utilize (0 == main process)
+)
+
+test_loader = DataLoader(
+    test_set,
+    batch_size=128,
+    shuffle=False,
+    num_workers=0
+)
+
+# get a random batch form data loader
+dataiter = iter(train_loader)
+images, labels = next(dataiter)
+print(images.shape)
+print(labels.shape)
 
 
 
