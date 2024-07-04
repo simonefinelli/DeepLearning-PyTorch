@@ -44,7 +44,7 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 import torch.optim as optim  # PyTorch's optimization library
-
+import torch.nn as nn
 
 from torch.utils.data import DataLoader
 from utils import *
@@ -107,5 +107,11 @@ net = CNN()
 # move the model (memory and operations) to the CUDA device (or CPU/RAM)
 net.to(device)
 
-
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Optimiser and Loss                                                          #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# loss function
+criterion = nn.CrossEntropyLoss()
+# optimiser
+optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
