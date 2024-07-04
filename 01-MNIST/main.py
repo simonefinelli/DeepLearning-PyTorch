@@ -11,8 +11,6 @@ we aim to analyze the model's performance and extract meaningful insights from
 the training process and results.
 
 Key Objectives:
-    Imports: import the used libraries.
-
     Transformer definition: Transformers are needed to ensure the instance
         (image) has the right format for input into our model.
         Typically, we transform the image to a PyTorch tensor and normalizing
@@ -27,13 +25,29 @@ Key Objectives:
 
     Inspect the dataset: Show samples of the dataset to inspect them.
 
-    Data loader: is a function that we'll use to grab our data in specified
+    Data loader: It is a function that we'll use to grab our data in specified
         batch sizes during training. Usually, we have a data loader for each
         dataset.
 
-    Model Design: Construct the Neural Network.
+    Model Design: Construct the Neural Network. In this case a Convolutional
+        Neural Network is used to recognize handwritten digits.
 
-    Training: Train the CNN tailored for digit recognition.
+    Optimisers: Gradient descent algorthm or Optimiser to train the model.
+
+    Loss Function: We need to define what type of loss we'll be using and what
+        method will be using to update the gradients. We use Cross Entropy Loss
+        as it is a multi-class problem.
+
+    Training: Train the CNN tailored for digit recognition. It can be divided
+        into these several steps:
+        1. Get a Mini-batch of 128 training instances (images with labels);
+        2. Initialise Gradients with zero values;
+        3. Forward pass and take outputs;
+        4. Compute loss using outputs;
+        5. Backward pass;
+        6. Update Gradients using the Optimiser.
+        7. Repeat 1-6 to cover the entire training set;
+        8. Repeat 7 for N epochs.
 
     Performance Evaluation: Use of the Confusion Matrix to evaluate accuracy,
         precision, recall, and F1 score.
