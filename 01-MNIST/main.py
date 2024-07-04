@@ -70,20 +70,26 @@ if torch.cuda.is_available():
 else:
     device = 'cpu'
 
-# images transformer
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# images transformer                                                          #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 transform = transforms.Compose(
     [transforms.ToTensor(),
-     transforms.Normalize((0.5,), (0.5,))]
-    # for RGB: (0.5, 0.5, 0.5), (0.5,0.5,0.5)
+     transforms.Normalize((0.5,), (0.5,))]  # RGB: mean: (0.5, 0.5, 0.5),
+                                                      # std: (0.5,0.5,0.5)
 )
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Dataset
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # load our Training Data applying transformations
 train_set = torchvision.datasets.MNIST('mnist',
                                        train=True,
                                        download=True,  # from PyTorch's datasets
                                        transform=transform)
 
-# load our Test Data applying transformations (sometimes can be different form those applied to training set)
+# load our Test Data applying transformations
+# (sometimes can be different form those applied to training set)
 test_set = torchvision.datasets.MNIST('mnist',
                                       train=False,
                                       download=True,
@@ -95,7 +101,9 @@ print(f"Test set size: {test_set.data.shape}")
 img_show("MNIST Sample", train_set.data[0].numpy())
 show_collage(train_set)
 
-# data loader
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# data loader                                                                 #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 train_loader = DataLoader(
     train_set,
     batch_size=128,
@@ -109,14 +117,15 @@ test_loader = DataLoader(
     shuffle=False,
     num_workers=0
 )
-
 # get a random batch form data loader
 dataiter = iter(train_loader)
 images, labels = next(dataiter)
 print(images.shape)
 print(labels.shape)
 
-# create an instance of the neural network
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Neural Network creation                                                     #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 net = CNN()
 # move the model (memory and operations) to the CUDA device (or CPU/RAM)
 net.to(device)
