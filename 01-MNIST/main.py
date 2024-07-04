@@ -106,6 +106,8 @@ print(labels.shape)
 net = CNN()
 # move the model (memory and operations) to the CUDA device (or CPU/RAM)
 net.to(device)
+# view architecture
+print(net)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Optimiser and Loss                                                          #
