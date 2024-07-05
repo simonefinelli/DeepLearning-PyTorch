@@ -140,3 +140,80 @@ criterion = nn.CrossEntropyLoss()
 # optimiser
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Training                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# number of iterations
+epochs = 10
+
+# log arrays
+epoch_log = []
+loss_log = []
+accuracy_log = []
+
+# training
+for epoch in range(epochs):
+    print(f'Starting Epoch: {epoch + 1}...')
+
+    # accumulating our loss after each mini-batch in running_loss
+    running_loss = 0.0
+
+    # iterate through mini-batch
+    for i, data in enumerate(train_loader, 0):
+        inputs, labels = data  # (images, labels)
+
+        # move data to GPU
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+
+        # clear the gradients before each batch (for a fresh start)
+        optimizer.zero_grad()
+
+        # Forward -> backprop + optimize
+        outputs = net(inputs)  # forward propagation
+        loss = criterion(outputs, labels)  # calculate Loss
+        loss.backward()  # back propagation to obtain the new gradients
+        optimizer.step()  # update the gradients/weights
+
+        # training statistics - Epochs/Iterations/Loss/Accuracy
+        running_loss += loss.item()
+        if i % 50 == 49:    # show our loss every 50 mini-batches
+            correct = 0  # count for the correct predictions
+            total = 0  # count of the number of labels iterated
+
+            with torch.no_grad():  # no need of gradients for validation step
+                # Iterate through the test_loader iterator
+                for test_data in test_loader:
+                    images, labels = test_data
+
+                    # Move our data to GPU
+                    images = images.to(device)
+                    labels = labels.to(device)
+
+                    # forward propagation
+                    outputs = net(images)
+
+                    # get predictions from the maximum value of the predicted output tensor
+                    # dim=1: specifies the number of dimensions to reduce
+                    print(outputs)
+                    print(outputs.shape)
+                    _, predicted = torch.max(outputs, dim=1)
+
+                    total += labels.size(0)
+                    correct += (predicted == labels).sum().item()
+
+                accuracy = 100 * correct / total
+                epoch_num = epoch + 1
+                actual_loss = running_loss / 50
+                print(f'Epoch: {epoch_num},'
+                      f'Mini-Batches Completed: {(i+1)}, '
+                      f'Loss: {actual_loss:.3f},'
+                      f'Test Accuracy = {accuracy:.3f}%')
+                running_loss = 0.0
+
+    # store training stats after each epoch
+    epoch_log.append(epoch_num)
+    loss_log.append(actual_loss)
+    accuracy_log.append(accuracy)
+
+print('End Training!')
