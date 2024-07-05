@@ -195,8 +195,6 @@ for epoch in range(epochs):
 
                     # get predictions from the maximum value of the predicted output tensor
                     # dim=1: specifies the number of dimensions to reduce
-                    print(outputs)
-                    print(outputs.shape)
                     _, predicted = torch.max(outputs, dim=1)
 
                     total += labels.size(0)
