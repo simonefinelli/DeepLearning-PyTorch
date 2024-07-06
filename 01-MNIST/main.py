@@ -49,8 +49,13 @@ Key Objectives:
         7. Repeat 1-6 to cover the entire training set;
         8. Repeat 7 for N epochs.
 
-    Performance Evaluation: Use of the Confusion Matrix to evaluate accuracy,
-        precision, recall, and F1 score.
+    Model Saving: Saving the model allows us to use it in the future to continue
+        training or make inferences, without having to repeat the training
+        every time.
+
+    Performance Evaluation: Use of standard metrics to evaluate the model:
+        accuracy, precision, recall, and F1 score.
+        See model_evaluation.py.
 """
 
 import torch
@@ -64,11 +69,12 @@ from torch.utils.data import DataLoader
 from utils import *
 from model import CNN
 
-# check for GPU
+# device selection
 if torch.cuda.is_available():
     device = 'cuda'
 else:
     device = 'cpu'
+print("Using device: ", device)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # images transformer                                                          #
@@ -215,3 +221,31 @@ for epoch in range(epochs):
     accuracy_log.append(accuracy)
 
 print('End Training!')
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Model Saving                                                                #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+PATH = './saved_models/cnn_model.pth'
+torch.save(net.state_dict(), PATH)
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Performance Evaluation                                                      #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# load the model
+net = CNN()
+net.to(device)
+net.load_state_dict(torch.load(PATH))  # load weights
+
+# Accuracy vs Loss
+fig, ax1 = plt.subplots()
+plt.title("Accuracy & Loss vs Epoch")
+plt.xticks(rotation=45)  # title and x-axis label rotation
+ax2 = ax1.twinx()
+ax1.plot(epoch_log, loss_log, 'g-')  # plot for loss_log and
+ax2.plot(epoch_log, accuracy_log, 'b-')  # plot for accuracy_log
+ax1.set_xlabel('Epochs')
+ax1.set_ylabel('Loss', color='g')
+ax2.set_ylabel('Test Accuracy', color='b')
+plt.show()
