@@ -17,6 +17,7 @@ import torchvision.transforms as transforms
 
 from torch.utils.data import DataLoader
 from model import CNN
+from utils import *
 
 # device selection
 if torch.cuda.is_available():
@@ -51,13 +52,36 @@ test_loader = DataLoader(test_set, batch_size=128, shuffle=False, num_workers=0)
 correct = 0
 total = 0
 with torch.no_grad():
-    for data in test_loader:
-        images, labels = data
+    for (images, labels) in test_loader:
         images = images.to(device)
         labels = labels.to(device)
         outputs = net(images)
-        _, predicted = torch.max(outputs, dim=1)  # argmax_ for long_ternsors
+        _, predicted = torch.max(outputs, dim=1)  # argmax_ for long_tensors
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
 accuracy = 100 * correct / total
 print(f'Accuracy of the network on the test set: {accuracy:.3}%')
+
+# Confusion Matrix
+pred_list = torch.zeros(0, dtype=torch.long, device='cpu')
+label_list = torch.zeros(0, dtype=torch.long, device='cpu')
+with torch.no_grad():
+    for i, (inputs, labels) in enumerate(test_loader):
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+        outputs = net(inputs)
+        _, preds = torch.max(outputs, 1)
+
+        # Append batch prediction results
+        pred_list = torch.cat([pred_list, preds.view(-1).cpu()])
+        label_list = torch.cat([label_list, labels.view(-1).cpu()])
+
+show_confusion_matrix(label_list, pred_list,
+                      list(range(0, 10)), list(range(0, 10)))
+
+# Classification Report
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Inference of Test set                                                       #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

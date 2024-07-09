@@ -181,7 +181,7 @@ for epoch in range(epochs):
         loss.backward()  # back propagation to obtain the new gradients
         optimizer.step()  # update the gradients/weights
 
-        # training statistics - Epochs/Iterations/Loss/Accuracy
+        # training statistics - epochs/iterations/loss/accuracy
         running_loss += loss.item()
         if i % 50 == 49:    # show our loss every 50 mini-batches
             correct = 0  # count for the correct predictions

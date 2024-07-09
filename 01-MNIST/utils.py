@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
 
 
 # Define our imshow function
@@ -60,4 +62,40 @@ def show_collage(train_set, size=(15, 8)):
         else:
             plt.imshow(train_set.data[index], cmap='gray')
 
+    plt.show()
+
+
+def show_confusion_matrix(label_list, pred_list, x_names, y_names,
+                          title='Confusion Matrix',
+                          color='#e88c13'):
+    # confusion matrix
+    conf_mat = confusion_matrix(label_list.numpy(), pred_list.numpy())
+    accuracy = np.trace(conf_mat) / np.sum(conf_mat).astype('float')
+    misclass = 1 - accuracy
+
+    palette = sns.light_palette(color, as_cmap=True)
+    ax = plt.subplot()
+    sns.heatmap(conf_mat, annot=True, ax=ax, fmt='d', cmap=palette)
+
+    # title
+    ax.set_title('\n' + title + '\n',
+                 fontweight='bold',  # ['light'|'normal'|'bold'|'heavy']
+                 fontstyle='italic',  # ['normal'|'italic'|'oblique']
+                 )
+
+    # x y labels
+    ax.set_xlabel('Predicted', fontweight='bold')
+    ax.set_ylabel('Actual', fontweight='bold')
+
+    # labels on axes
+    ax.xaxis.set_ticklabels(x_names, ha='center')  # ['left'|'right'|'center']
+    ax.yaxis.set_ticklabels(y_names, va='center')  # ['left'|'right'|'center']
+
+    # accuracy and misclassification (1 - accuracy)
+    info_text = 'Accuracy={:0.4f} - Misclass={:0.4f}'.format(accuracy, misclass)
+    plt.figtext(0.5, 0.05, info_text, ha='center', fontsize=10)
+
+    plt.subplots_adjust(bottom=0.2)
+
+    # show plot
     plt.show()
