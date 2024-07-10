@@ -10,10 +10,12 @@ The steps involved include:
         transformations.
     4. Computing the accuracy of the model on the test dataset by comparing the
         predicted labels with the true labels.
+    5. Insight into performances using Precision, Recall and F1 score.
 """
 import torch
 import torchvision
 import torchvision.transforms as transforms
+from sklearn.metrics import classification_report
 
 from torch.utils.data import DataLoader
 from model import CNN
@@ -80,6 +82,7 @@ show_confusion_matrix(label_list, pred_list,
                       list(range(0, 10)), list(range(0, 10)))
 
 # Classification Report
+print(classification_report(label_list.numpy(), pred_list.numpy()))
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
