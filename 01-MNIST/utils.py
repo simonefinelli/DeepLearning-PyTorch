@@ -5,7 +5,6 @@ from sklearn.metrics import confusion_matrix
 import seaborn as sns
 
 
-# Define our imshow function
 def img_show(title="", image=None, size=6):
     """
     Display an image with a specified title and size.
