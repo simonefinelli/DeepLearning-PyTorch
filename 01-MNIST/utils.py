@@ -37,7 +37,7 @@ def img_show(title="", image=None, size=6):
     plt.show()
 
 
-def show_collage(train_set, size=(15, 8)):
+def show_collage(imgs_set, size=(15, 8)):
     """
     Display a collage of the first 50 images from a given Torch dataset.
 
@@ -47,7 +47,7 @@ def show_collage(train_set, size=(15, 8)):
     it is displayed using the 'gray' colormap.
 
     :param size: tuple, optional: The size of the displayed image in inches.
-    :param train_set: object: PyTorch dataset.
+    :param imgs_set: object: PyTorch dataset.
     """
     plt.figure(figsize=(size[0], size[1]))
 
@@ -56,10 +56,10 @@ def show_collage(train_set, size=(15, 8)):
     for index in range(1, num_of_images + 1):
         plt.subplot(5, 10, index)
         plt.axis('off')
-        if len(train_set.data[index].shape) == 3:
-            plt.imshow(train_set.data[index])
+        if len(imgs_set.data[index].shape) == 3:
+            plt.imshow(imgs_set.data[index])
         else:
-            plt.imshow(train_set.data[index], cmap='gray')
+            plt.imshow(imgs_set.data[index], cmap='gray')
 
     plt.show()
 
