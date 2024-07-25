@@ -74,7 +74,7 @@ with torch.no_grad():
         outputs = net(inputs)
         _, preds = torch.max(outputs, 1)
 
-        # Append batch prediction results
+        # append batch prediction results
         pred_list = torch.cat([pred_list, preds.view(-1).cpu()])
         label_list = torch.cat([label_list, labels.view(-1).cpu()])
 
