@@ -53,12 +53,12 @@ test_loader = DataLoader(test_set, batch_size=128, shuffle=False, num_workers=0)
 # Test Accuracy
 correct = 0
 total = 0
-with torch.no_grad():
+with torch.no_grad():  # use no_grad to save memory (gradients are unuseful during test)
     for (images, labels) in test_loader:
         images = images.to(device)
         labels = labels.to(device)
         outputs = net(images)
-        _, predicted = torch.max(outputs, dim=1)  # argmax_ for long_tensors
+        _, predicted = torch.max(outputs, dim=1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
 accuracy = 100 * correct / total
@@ -86,5 +86,21 @@ print(classification_report(label_list.numpy(), pred_list.numpy()))
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Inference of Test set                                                       #
+# View Misclassification                                                      #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+print(f"Misclassified images on Test Set:")
+with torch.no_grad():
+    for data in test_loader:
+        images, labels = data
+        images = images.to(device)
+        labels = labels.to(device)
+        outputs = net(images)
+        predictions = torch.argmax(outputs, dim=1)
+
+        # For test data in each batch we identify when predictions did not match the label
+        # then we print out the actual ground truth
+        for i in range(data[0].shape[0]):
+            pred = predictions[i].item()
+            label = labels[i]
+            if label != pred:
+                print(f'Actual Label: {pred}, Predicted Label: {label}')
