@@ -96,9 +96,7 @@ with torch.no_grad():
         labels = labels.to(device)
         outputs = net(images)
         predictions = torch.argmax(outputs, dim=1)
-
-        # For test data in each batch we identify when predictions did not match the label
-        # then we print out the actual ground truth
+        # check divergent labels
         for i in range(data[0].shape[0]):
             pred = predictions[i].item()
             label = labels[i]
